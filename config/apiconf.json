@@ -1,0 +1,19 @@
+{
+    "api":{
+        "name":"api-gateway",
+        "port":":8080",
+        "log": {
+            "level":"development"
+        },
+        "services":{
+            "post_service": {
+                "port": "9002",
+                "host": "localhost"
+            },
+            "post_loader": {
+                "port": "9001",
+                "host": "localhost"
+            }
+        }
+    }
+}
