@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -22,12 +23,15 @@ func NewConfig() Config {
 	v.SetConfigType("json")
 
 	v.AddConfigPath("./config")
+	v.AddConfigPath(getConfigPath())
+	if err := v.ReadInConfig(); err != nil {
+		panic(err)
+	}
 
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 
 	v.WatchConfig()
-
 	return &cfg{c: v}
 }
 
@@ -37,4 +41,16 @@ func (c *cfg) GetString(key string) string {
 
 func (c *cfg) GetInt(key string) int {
 	return c.c.GetInt(key)
+}
+
+func getConfigPath() (path string) {
+
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	slice := strings.Split(wd, "api-gateway-iman")
+	path = slice[0] + "api-gateway-iman/config"
+	return
 }

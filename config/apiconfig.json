@@ -1,7 +1,7 @@
 {
-    "api":{
+    "app":{
         "name":"api-gateway",
-        "port":":8080",
+        "port":":8085",
         "log": {
             "level":"development"
         },
