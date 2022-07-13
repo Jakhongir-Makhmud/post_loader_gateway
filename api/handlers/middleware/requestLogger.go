@@ -35,7 +35,7 @@ func (m *middleware) LogRequest(req http.HandlerFunc) http.HandlerFunc {
 		m.logger.Info("Incoming request: ",
 			zap.String("ip address: ", r.RemoteAddr),
 			zap.String("request endpoint: ", r.URL.Path),
-			zap.String("reqeust method: ", r.Method))
+			zap.String("request method: ", r.Method))
 
 		req.ServeHTTP(rw, r)
 	})

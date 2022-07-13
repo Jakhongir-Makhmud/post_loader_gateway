@@ -10,20 +10,26 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 )
 
 func (h *postHandler) GetPost(rw http.ResponseWriter, r *http.Request) {
-	var request structs.GetPostReq
-	err := json.NewDecoder(r.Body).Decode(&request)
+
+	params := mux.Vars(r)
+	idStr, ok := params["id"]
+	if !ok {
+		utils.ReplyToReq(rw, http.StatusBadRequest, pbp.Post{})
+		return
+	}
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		h.Logger.Warn("can not unmarshal json to struct", zap.Error(err))
 		utils.ReplyToReq(rw, http.StatusBadRequest, pbp.Post{})
 		return
 	}
 	ctx, cancel := context.WithTimeout(r.Context(), time.Duration(h.cfg.GetInt("app.services.reqTimeout"))*time.Second)
 	defer cancel()
-	post, err := h.services.PostService().GetPost(ctx, &pbp.PostId{Id: request.Id})
+	post, err := h.services.PostService().GetPost(ctx, &pbp.PostId{Id: int64(id)})
 	if err != nil {
 		h.Logger.Error("can not get post from post-service", zap.Error(err))
 		utils.ReplyToReq(rw, http.StatusInternalServerError, structs.ErrInternalResponse)
@@ -59,13 +65,13 @@ func (h *postHandler) UpdatePost(rw http.ResponseWriter, r *http.Request) {
 
 func (h *postHandler) DeletePost(rw http.ResponseWriter, r *http.Request) {
 
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
-	if err != nil {
-		h.Warn("invalid id in url path", zap.Error(err))
-		utils.ReplyToReq(rw, http.StatusBadRequest, pbp.Post{})
+	params := mux.Vars(r)
+	idStr, ok := params["id"]
+	if !ok {
+		utils.ReplyToReq(rw, http.StatusBadRequest, struct{}{})
 		return
-
 	}
+	id, err := strconv.Atoi(idStr)
 	ctx, cancel := context.WithTimeout(r.Context(), time.Duration(h.cfg.GetInt("app.services.reqTimeout"))*time.Second)
 	defer cancel()
 

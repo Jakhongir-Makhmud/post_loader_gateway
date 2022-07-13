@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 )
 
@@ -66,8 +67,9 @@ func (h *postLoaderHandler) LoadPosts(rw http.ResponseWriter, r *http.Request) {
 
 func (h *postLoaderHandler) GetLoadingStatus(rw http.ResponseWriter, r *http.Request) {
 
-	id := r.URL.Query().Get("id")
-	if len(id) == 0 {
+	params := mux.Vars(r)
+	id, ok := params["id"]
+	if !ok {
 		utils.ReplyToReq(rw, http.StatusBadRequest, pbl.LoadingStatus{})
 		return
 	}

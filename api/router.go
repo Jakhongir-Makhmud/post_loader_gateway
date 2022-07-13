@@ -21,7 +21,7 @@ func NewRouter(params Params) *mux.Router {
 	r := mux.NewRouter()
 	handlers := handlers.NewHandlers(handlers.Params{Logger: params.Logger, Cfg: params.Cfg, Services: params.Services})
 
-	r.HandleFunc("/post/get", middleware.ApplyMiddleware(handlers.PostHandler.GetPost, handlers.Middleware.LogRequest)).Methods("GET")
+	r.HandleFunc("/post/get/{id}", middleware.ApplyMiddleware(handlers.PostHandler.GetPost, handlers.Middleware.LogRequest)).Methods("GET")
 	r.HandleFunc("/post/update", middleware.ApplyMiddleware(handlers.PostHandler.UpdatePost, handlers.Middleware.LogRequest)).Methods("UPDATE")
 	r.HandleFunc("/post/delete/{id}", middleware.ApplyMiddleware(handlers.PostHandler.DeletePost, handlers.Middleware.LogRequest)).Methods("DELETE")
 	r.HandleFunc("/post/list", middleware.ApplyMiddleware(handlers.PostHandler.GetPosts, handlers.Middleware.LogRequest)).Methods("POST")
