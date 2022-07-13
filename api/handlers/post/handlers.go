@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -31,6 +32,10 @@ func (h *postHandler) GetPost(rw http.ResponseWriter, r *http.Request) {
 	defer cancel()
 	post, err := h.services.PostService().GetPost(ctx, &pbp.PostId{Id: int64(id)})
 	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			utils.ReplyToReq(rw, http.StatusNotFound, structs.NotFoundResponse)
+			return
+		}
 		h.Logger.Error("can not get post from post-service", zap.Error(err))
 		utils.ReplyToReq(rw, http.StatusInternalServerError, structs.ErrInternalResponse)
 		return
@@ -98,6 +103,10 @@ func (h *postHandler) GetPosts(rw http.ResponseWriter, r *http.Request) {
 
 	posts, err := h.services.PostService().ListPost(ctx, &pbp.ListOfPosts{Page: request.Page, Limit: request.Limit})
 	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			utils.ReplyToReq(rw, http.StatusNotFound, structs.NotFoundResponse)
+			return
+		}
 		h.Logger.Error("can not get posts from post-service", zap.Error(err))
 		utils.ReplyToReq(rw, http.StatusInternalServerError, structs.ErrInternalResponse)
 		return
