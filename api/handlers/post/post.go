@@ -8,8 +8,8 @@ import (
 )
 
 type Params struct {
-	Cfg config.Config
-	Logger logger.Logger
+	Cfg      config.Config
+	Logger   logger.Logger
 	Services serviceconn.ServiceController
 }
 
@@ -21,18 +21,15 @@ type PostHandler interface {
 }
 
 type postHandler struct {
-	cfg config.Config
+	cfg      config.Config
 	services serviceconn.ServiceController
 	logger.Logger
 }
 
 func NewPostHandler(params Params) PostHandler {
 	return &postHandler{
-		cfg: params.Cfg,
-		Logger: params.Logger,
+		cfg:      params.Cfg,
+		Logger:   params.Logger,
 		services: params.Services,
 	}
-} 
-
-
-
+}

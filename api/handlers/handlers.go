@@ -18,22 +18,22 @@ type Params struct {
 type Handlers struct {
 	PostHandler       post.PostHandler
 	PostLoaderHandler postloader.PostLoaderHandler
-	Middleware middleware.Middleware
+	Middleware        middleware.Middleware
 }
 
 func NewHandlers(params Params) Handlers {
 
 	postHandler := post.NewPostHandler(post.Params{
-		Cfg: params.Cfg, 
-		Logger: params.Logger, 
+		Cfg:      params.Cfg,
+		Logger:   params.Logger,
 		Services: params.Services})
 
 	postLoaderHandler := postloader.NewPostLoader(postloader.Params{
-		Cfg: params.Cfg, 
-		Logger: params.Logger, 
+		Cfg:      params.Cfg,
+		Logger:   params.Logger,
 		Services: params.Services})
 
 	middleware := middleware.NewMiddleware(params.Logger)
-	
+
 	return Handlers{postHandler, postLoaderHandler, middleware}
 }

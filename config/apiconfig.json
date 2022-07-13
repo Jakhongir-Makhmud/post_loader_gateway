@@ -13,7 +13,8 @@
             "post_loader": {
                 "port": "9001",
                 "host": "localhost"
-            }
+            },
+            "reqTimeout": 5
         }
     }
 }
