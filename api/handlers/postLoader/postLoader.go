@@ -42,6 +42,15 @@ func NewPostLoader(params Params) PostLoaderHandler {
 	}
 }
 
+// @Summary load posts
+// @Description loads posts to database
+// @Tags Post-loader
+// @Accept json
+// @Produce json
+// @Param load body structs.LoadPostsReq true "load posts"
+// @Success 200 {object} post_loader_service.LoadingStatus
+// @Failure 500 {object}  post.Empty
+// @Router /load/posts [post]
 func (h *postLoaderHandler) LoadPosts(rw http.ResponseWriter, r *http.Request) {
 	var request structs.LoadPostsReq
 
@@ -65,6 +74,14 @@ func (h *postLoaderHandler) LoadPosts(rw http.ResponseWriter, r *http.Request) {
 	utils.ReplyToReq(rw, http.StatusOK, status)
 }
 
+// @Summary get load status
+// @Description gets loading status by process id
+// @Tags Post-loader
+// @Produce json
+// @Param id path string true "id"
+// @Success 200 {object} post_loader_service.LoadingStatus
+// @Failure 500 {object}  post.Empty
+// @Router /load/status/{id} [get]
 func (h *postLoaderHandler) GetLoadingStatus(rw http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)

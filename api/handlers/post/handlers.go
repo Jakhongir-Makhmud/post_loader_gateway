@@ -15,6 +15,14 @@ import (
 	"go.uber.org/zap"
 )
 
+// @Summary get post
+// @Description gets post by id
+// @Tags Post
+// @Produce json
+// @Param id path string true "id"
+// @Success 200 {object} post.Post
+// @Failure 500 {object}  post.Empty
+// @Router /post/get/{id} [get]
 func (h *postHandler) GetPost(rw http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
@@ -44,6 +52,15 @@ func (h *postHandler) GetPost(rw http.ResponseWriter, r *http.Request) {
 	utils.ReplyToReq(rw, http.StatusOK, post)
 }
 
+// @Summary update post
+// @Description updates post
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param post body structs.UpdatePostReq true "post to update"
+// @Success 200 {object} post.Post
+// @Failure 500 {object}  post.Empty
+// @Router /post/update [put]
 func (h *postHandler) UpdatePost(rw http.ResponseWriter, r *http.Request) {
 
 	var request structs.UpdatePostReq
@@ -68,6 +85,14 @@ func (h *postHandler) UpdatePost(rw http.ResponseWriter, r *http.Request) {
 	utils.ReplyToReq(rw, http.StatusOK, post)
 }
 
+// @Summary delete post
+// @Description deletes post by id
+// @Tags Post
+// @Produce json
+// @Param id path string true "id"
+// @Success 200 {object} post.Empty
+// @Failure 500 {object}  post.Empty
+// @Router /post/delete/{id} [delete]
 func (h *postHandler) DeletePost(rw http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
@@ -89,6 +114,15 @@ func (h *postHandler) DeletePost(rw http.ResponseWriter, r *http.Request) {
 
 }
 
+// @Summary get list of posts
+// @Description gets posts by pages and limits
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param pagesAndLimits body structs.GetListPostsReq true "params"
+// @Success 201 {object} post.Posts
+// @Failure 500 {object}  post.Empty
+// @Router /post/list [get]
 func (h *postHandler) GetPosts(rw http.ResponseWriter, r *http.Request) {
 	var request structs.GetListPostsReq
 
