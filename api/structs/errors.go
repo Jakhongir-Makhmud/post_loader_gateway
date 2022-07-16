@@ -8,13 +8,12 @@ type Response struct {
 }
 
 var (
-	ErrNotFound = errors.New("not found")
+	ErrNotFound         = errors.New("not found")
 	ErrInternalResponse = Response{
-	Status: "Failed",
-	Msg:    "Internal server error occured",
-}
+		Status: "Failed",
+		Msg:    "Internal server error occured",
+	}
 	NotFoundResponse = Response{
 		Status: "not found",
 	}
-
 )
