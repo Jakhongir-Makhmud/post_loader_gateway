@@ -1,0 +1,209 @@
+basePath: /
+definitions:
+  post.Empty:
+    type: object
+  post.Post:
+    properties:
+      Body:
+        type: string
+      Id:
+        type: integer
+      Title:
+        type: string
+    type: object
+  post.Posts:
+    properties:
+      Posts:
+        items:
+          $ref: '#/definitions/post.Post'
+        type: array
+    type: object
+  post_loader_service.LoadingStatus:
+    properties:
+      ProcessId:
+        type: string
+      Status:
+        type: string
+      TotalWork:
+        type: integer
+      WorkOfDone:
+        type: integer
+    type: object
+  structs.GetListPostsReq:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+    type: object
+  structs.LoadPostsReq:
+    properties:
+      pages:
+        type: integer
+    type: object
+  structs.UpdatePostReq:
+    properties:
+      body:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+host: localhost:9003
+info:
+  contact:
+    email: anorboev.jahongir8007@gmail.com
+    name: Jakhongir
+  description: This is a post server
+  title: Post api
+  version: "1.0"
+paths:
+  /load/posts:
+    post:
+      consumes:
+      - application/json
+      description: loads posts to database
+      parameters:
+      - description: load posts
+        in: body
+        name: load
+        required: true
+        schema:
+          $ref: '#/definitions/structs.LoadPostsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post_loader_service.LoadingStatus'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/post.Empty'
+      summary: load posts
+      tags:
+      - Post-loader
+  /load/status/{id}:
+    get:
+      description: gets loading status by process id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post_loader_service.LoadingStatus'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/post.Empty'
+      summary: get load status
+      tags:
+      - Post-loader
+  /post/delete/{id}:
+    delete:
+      description: deletes post by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.Empty'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/post.Empty'
+      summary: delete post
+      tags:
+      - Post
+  /post/get/{id}:
+    get:
+      description: gets post by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.Post'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/post.Empty'
+      summary: get post
+      tags:
+      - Post
+  /post/list:
+    get:
+      consumes:
+      - application/json
+      description: gets posts by pages and limits
+      parameters:
+      - description: params
+        in: body
+        name: pagesAndLimits
+        required: true
+        schema:
+          $ref: '#/definitions/structs.GetListPostsReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/post.Posts'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/post.Empty'
+      summary: get list of posts
+      tags:
+      - Post
+  /post/update:
+    put:
+      consumes:
+      - application/json
+      description: updates post
+      parameters:
+      - description: post to update
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/structs.UpdatePostReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.Post'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/post.Empty'
+      summary: update post
+      tags:
+      - Post
+swagger: "2.0"
